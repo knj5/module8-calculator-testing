@@ -48,6 +48,11 @@ jobs:
      - name: Build image
        run: docker build -t app:test .
      
+     - name: Inspect image dependencies
+       run: |
+         docker run --rm --entrypoint python app:test -c "import importlib.metadata as m; [print(f'{p}: {m.version(p)}') for p in ('msgpack', 'setuptools', 'urllib3')]"
+         docker run --rm --entrypoint sh app:test -c "find /app /usr/local /opt -type d \\( -name 'msgpack-*.dist-info' -o -name 'setuptools-*.dist-info' -o -name 'urllib3-*.dist-info' \\) -print 2>/dev/null || true"
+
      - name: Run Trivy vulnerability scanner
        uses: aquasecurity/trivy-action@master
        with:
