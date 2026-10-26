@@ -71,4 +71,4 @@ def test_calculator_divide_by_zero(page, fastapi_server):
     # Use an assertion to check that the text within the result div (with id 'result') is exactly
     # "Error: Cannot divide by zero!". This verifies that the application handles division by zero
     # gracefully and displays the correct error message to the user.
-    assert page.inner_text('#result').strip() == 'Error: Cannot divide by zero!'
+    page.locator('#result').get_by_text('Error: Cannot divide by zero!', exact=True).wait_for(timeout=10000)
